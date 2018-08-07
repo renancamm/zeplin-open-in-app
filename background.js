@@ -1,9 +1,9 @@
 var callback = function(details) {
     console.log(details);
 
-    //get ids
-    project_id = details.url.match(/(?<=project\/)(.*?)(?=\/|$)/g);
-    screen_id = details.url.match(/(?<=screen\/)(.*?)(?=\/|$)/g);
+    //get ids from url string
+    project_id = details.url.match(/(?<=project\/)(.*?)(?=\/|\?|$)/g);
+    screen_id = details.url.match(/(?<=screen\/)(.*?)(?=\/|\?|$)/g);
     console.log("pid: "+project_id)
     console.log("sid: "+screen_id)
 
