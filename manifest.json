@@ -6,7 +6,17 @@
     "background": {
       "scripts": ["background.js"]
     },
+    "browser_action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "images/zeplinopeninapp16.png",
+        "32": "images/zeplinopeninapp32.png",
+        "48": "images/zeplinopeninapp48.png",
+        "128": "images/zeplinopeninapp128.png"
+      }
+    },
     "permissions": [
+      "storage",
       "webRequest",
       "webRequestBlocking",
       "*://app.zeplin.io/*"
