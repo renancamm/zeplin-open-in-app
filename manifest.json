@@ -1,5 +1,5 @@
   {
-    "name": "Zeplin open in app",
+    "name": "Zeplin, open in app!",
     "description": "Redirects Zeplin web links to zpl:// app protocol",
     "version": "0.1",
     "manifest_version": 2,
