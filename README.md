@@ -4,7 +4,7 @@
 # Zeplin, open in app!
 **Redirects Zeplin web links to zpl:// app protocol**
 
-This is a small extension that intercept all the requests on `https://app.zeplin.io/project/` and redirects to the equivalent `zpl://screen?sid=`, so you don't have to worry anymore about non-clickable links and teammates without the Zeplin app.
+This is a small Google Chrome extension that intercept all the requests on `https://app.zeplin.io/project/` and redirects to the equivalent `zpl://screen?sid=`, so you don't have to worry anymore about non-clickable links and teammates without the Zeplin app.
 
 Learn more about Zeplin here: https://zeplin.io/
 
