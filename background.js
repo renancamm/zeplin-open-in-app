@@ -1,13 +1,28 @@
 var settingEnabled
 chrome.storage.sync.get({ settingEnabled: true },
-    function (items) { settingEnabled = items.settingEnabled; }
+    function (items) {
+        settingEnabled = items.settingEnabled;
+        updateBadge();
+    }
 );
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     for (key in changes) {
         settingEnabled = changes[key].newValue;
+        console.log("Updated settings: " + settingEnabled);
+        updateBadge();
     }
 });
+
+function updateBadge() {
+    if (settingEnabled) {
+        chrome.browserAction.setBadgeText({text: ""});
+    } else {
+        chrome.browserAction.setBadgeText({text: "✕"});
+        chrome.browserAction.setBadgeBackgroundColor({color: "#da1616"});
+    }
+
+}
 
 
 var callback = function (details) {
@@ -30,7 +45,8 @@ var callback = function (details) {
                 app_url = "zpl://project?pid=" + project_id; //use project url
             }
             console.log("redirect: " + app_url);
-            return { redirectUrl: app_url }; //Redirect
+            setTimeout(function(){ chrome.tabs.remove(details.tabId, function() { }); }, 5000)
+            return { redirectUrl: app_url }  //Redirect
         } else {
             return //Skip if no project id
         }
