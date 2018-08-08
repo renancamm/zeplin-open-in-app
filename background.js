@@ -24,39 +24,54 @@ var storageCallback = function (changes, namespace) {
 var requestCallback = function (details) {
     // Check if is enable
     if (settingEnabled) {
+        // Define which id pattern to look for
+        var ids = {
+            path: {
+                project: "project", // project/1234abcd
+                screen: "screen"
+            },
+            query: {
+                screen: "sid", // ?sid=1234abcd
+                section: "seid",
+                tag: "tag",
+                component_screen: "coid",
+                component_section: "cseid",
+            }
+        }
 
-        // Get ids from url string
-        project_path_id = details.url.match(/(?<=project\/)(.*?)(?=\/|\?|$)/g);
-        screen_path_id = details.url.match(/(?<=screen\/)(.*?)(?=\/|\?|$)/g);
-        screen_query_id = details.url.match(/(?<=\?sid\=)(.*?)(?=\/|\?|$)/g);
-        section_query_id = details.url.match(/(?<=\?seid\=)(.*?)(?=\/|\?|$)/g);
-        tag_query_id = details.url.match(/(?<=\?tag\=)(.*?)(?=\/|\?|$)/g);
-        component_screen_query_id = details.url.match(/(?<=\?coid\=)(.*?)(?=\/|\?|$)/g);
-        component_section_query_id = details.url.match(/(?<=\?cseid\=)(.*?)(?=\/|\?|$)/g);
+        //Get ids from url string with regex match
+        for (key in ids.path) {
+            var pattern = "(?<=" + ids.path[key] + "\\/)(.*?)(?=\\/|\\?|$)"; // pattern: key/****
+            ids.path[key] = details.url.match(new RegExp(pattern, 'g'));
+        }
 
+        for (key in ids.query) {
+            var pattern = "(?<=\\?" + ids.query[key] + "\\=)(.*?)(?=\\/|\\?|$)"; // pattern: ?key=****
+            ids.query[key] = details.url.match(new RegExp(pattern, 'g'));
+        }
 
         // Open an project, screen, section, tag or component view?
-        if (project_path_id) {
-            if (screen_path_id) {
-                app_url = "zpl://screen?sid="+screen_path_id+"&pid="+project_path_id;
+        if (ids.path.project) {
+            if (ids.path.screen) {
+                app_url = "zpl://screen?sid=" + ids.path.screen + "&pid=" + ids.path.project;
             }
-            else if (screen_query_id) {
-                app_url = "zpl://screen?sid="+screen_query_id+"&pid="+project_path_id;
+            else if (ids.query.screen) {
+                app_url = "zpl://screen?sid=" + ids.query.screen + "&pid=" + ids.path.project;
             }
-            else if (section_query_id) {
-                app_url = "zpl://project?pid="+project_path_id+"&seid="+section_query_id;
+            else if (ids.query.section) {
+                app_url = "zpl://project?pid=" + ids.path.project + "&seid=" + ids.query.query.section;
             }
-            else if (tag_query_id) {
-                app_url = "zpl://project?pid="+project_path_id+"&tag="+tag_query_id;
+            else if (ids.query.tag) {
+                app_url = "zpl://project?pid=" + ids.path.project + "&tag=" + ids.query.tag;
             }
-            else if (component_screen_query_id) {
-                app_url = "zpl://components?pid="+project_path_id+"&coids="+component_screen_query_id;
+            else if (ids.query.component_screen) {
+                app_url = "zpl://components?pid=" + ids.path.project + "&coids=" + ids.query.component_screen;
             }
-            else if (component_section_query_id) {
-                app_url = "zpl://components?pid="+project_path_id+"&cseid="+component_section_query_id;
+            else if (ids.query.component_section) {
+                app_url = "zpl://components?pid=" + ids.path.project + "&cseid=" + ids.query.component_section;
             }
             else {
-                app_url = "zpl://project?pid="+project_path_id;
+                app_url = "zpl://project?pid=" + ids.path.project;
             }
             closeTab(details.tabId);
             console.log(app_url);
@@ -81,7 +96,11 @@ function updateBadge() {
 }
 
 function closeTab(tabId) {
-    setTimeout(function () { chrome.tabs.remove(tabId, function () { }); }, 5000)
+    setTimeout(function () {
+        if (tabId) {
+            chrome.tabs.remove(tabId, function () { });
+        }
+    }, 5000)
 }
 
 
