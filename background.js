@@ -31,22 +31,28 @@ var requestCallback = function (details) {
         //get ids from url string
         project_id = details.url.match(/(?<=project\/)(.*?)(?=\/|\?|$)/g);
         screen_id = details.url.match(/(?<=screen\/)(.*?)(?=\/|\?|$)/g);
+        section_id = details.url.match(/(?<=seid\=)(.*?)(?=\/|\?|$)/g);
+
         console.log("pid: " + project_id)
         console.log("sid: " + screen_id)
+        console.log("seid: " + section_id)
 
         //use project or screen url?
-        if (project_id != null) {
-            if (screen_id != null) {
+        if (project_id) {
+            if (screen_id) {
                 app_url = "zpl://screen?sid=" + screen_id + "&pid=" + project_id; //use screen url
+            }
+            else if (section_id) {
+                app_url = "zpl://project?pid=" + project_id + "&seid=" + section_id; //use section url
             }
             else {
                 app_url = "zpl://project?pid=" + project_id; //use project url
             }
             console.log("redirect: " + app_url);
             closeTab(details.tabId);
-            return { redirectUrl: app_url }  //Redirect
+            return { redirectUrl: app_url }  //redirect
         } else {
-            return //Skip if no project id
+            return //skip if no project id
         }
     } else {
         console.log("settingEnable is off: " + settingEnabled);
