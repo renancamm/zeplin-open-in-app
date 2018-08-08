@@ -59,7 +59,7 @@ var requestCallback = function (details) {
                 app_url = "zpl://screen?sid=" + ids.query.screen + "&pid=" + ids.path.project;
             }
             else if (ids.query.section) {
-                app_url = "zpl://project?pid=" + ids.path.project + "&seid=" + ids.query.query.section;
+                app_url = "zpl://project?pid=" + ids.path.project + "&seid=" + ids.query.section;
             }
             else if (ids.query.tag) {
                 app_url = "zpl://project?pid=" + ids.path.project + "&tag=" + ids.query.tag;
