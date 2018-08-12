@@ -73,7 +73,7 @@ var requestCallback = function (details) {
             else {
                 app_url = "zpl://project?pid=" + ids.path.project;
             }
-            closeTab(details.tabId);
+            closeTab(details.tab.id);
             console.log(app_url);
             return { redirectUrl: app_url }  // Redirect with zpl protocol
         }
